@@ -11,3 +11,6 @@ WHERE precio > (SELECT AVG(precio) FROM Producto);
 SELECT p.*, f.nombre AS nombre_fabricante FROM Producto p, Fabricante f
 WHERE precio > (SELECT AVG(precio) FROM Producto) AND p.id_fabricante = f.id_fabricante;
 
+SELECT f.nombre, ROUND(SUM(p.precio),2) AS Nombre_fabricante FROM Producto p, Fabricante f
+WHERE p.id_fabricante = f.id_fabricante
+GROUP BY f.id_fabricante;
