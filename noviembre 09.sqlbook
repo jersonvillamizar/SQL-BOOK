@@ -1,0 +1,13 @@
+-- SQLBook: Code
+USE JersonDB;
+SELECT f.nombre FROM Producto p 
+RIGHT JOIN Fabricante f ON p.id_fabricante = f.id_fabricante
+WHERE p.id_producto IS NULL
+ORDER BY p.id_producto;
+
+SELECT p.*, f.nombre AS nombre_fabricante FROM Producto p 
+INNER JOIN Fabricante f ON p.id_fabricante = f.id_fabricante 
+WHERE precio > (SELECT AVG(precio) FROM Producto);
+SELECT p.*, f.nombre AS nombre_fabricante FROM Producto p, Fabricante f
+WHERE precio > (SELECT AVG(precio) FROM Producto) AND p.id_fabricante = f.id_fabricante;
+

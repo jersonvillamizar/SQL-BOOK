@@ -1,0 +1,61 @@
+-- SQLBook: Code
+CREATE TABLE Persons (
+    ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int,
+    City varchar(255),
+    CONSTRAINT CHK_Person CHECK (Age>=18 AND City='Sandnes')
+);
+INSERT INTO Persons(LastName,FirstName,Age,City) VALUES
+('Svensson','Per',24,'Sandnes'),
+('Johansson','Maria',19,'Stockholm');
+ALTER TABLE `Persons` DROP CONSTRAINT `CHK_Person`;
+SELECT * FROM Persons;
+-- SQLBook: Code
+SELECT CONCAT(FirstName, ' ', LastName) AS 'Nombre completo'
+FROM `Persons`;
+SELECT LENGTH(CONCAT(FirstName, ' ', LastName)) as 'Longitud'
+FROM `Persons`;
+SELECT LENGTH(CONCAT(FirstName, ' ', LastName)) as 'Longitud', CONCAT(FirstName, ' ', LastName) AS 'Nombre completo'
+FROM `Persons`;
+-- SQLBook: Code
+CREATE TABLE IF NOT EXISTS Fabricante (
+    id_fabricante INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL
+) AUTO_INCREMENT = 1;
+CREATE TABLE IF NOT EXISTS Producto (
+    id_producto INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(30) NOT NULL,
+    precio FLOAT NOT NULL,
+    id_fabricante INT,
+    FOREIGN KEY (id_fabricante) REFERENCES Fabricante(id_fabricante)
+) AUTO_INCREMENT = 1;
+DESCRIBE Producto;
+DESCRIBE Fabricante;
+INSERT INTO Fabricante(nombre) VALUES ('Asus'), ('Lenovo'), ('Hewlett-Packard'), ('Samsung'), ('Seagate'), ('Crucial'), ('Gigabyte'), ('Huawei');
+INSERT INTO Producto(nombre, precio, id_fabricante) VALUES
+('Disco duro SATA3 1TB', 86.99, 5),
+('Memoria RAM DDR4 8GB', 120, 6),
+('Disco SSD 1 TB', 150.99, 4),
+('GeForce GTX 1050Ti', 185, 7),
+('GeForce GTX 1080 Xtreme', 755, 6),
+('Monitor 24 LED Full HD', 202, 1),
+('Monitor 27 LED Full HD', 245.99, 1),
+('Portátil Yoga 520', 559, 2),
+('Portátil Ideapd 320', 444, 2),
+('Impresora HP Deskjet 3720', 59.99, 3),
+('Impresora HP Laserjet Pro', 180, 3);
+
+SELECT * FROM Fabricante;
+SELECT * FROM Producto;
+DESCRIBE Producto;
+SELECT * FROM Producto p 
+INNER JOIN Fabricante f ON p.id_fabricante = f.id_fabricante
+ORDER BY p.id_producto;
+
+ALTER TABLE Producto DROP PRIMARY KEY, DROP COLUMN id_producto;
+ALTER TABLE Producto ADD COLUMN id_producto INT AUTO_INCREMENT PRIMARY KEY FIRST;
+
+
+

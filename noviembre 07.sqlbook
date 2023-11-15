@@ -1,0 +1,94 @@
+-- SQLBook: Code
+CREATE DATABASE Administracion;
+USE Administracion;
+-- SQLBook: Code
+CREATE TABLE usuarios (
+    nombre VARCHAR(30),
+    clave VARCHAR(10)
+);
+-- SQLBook: Code
+/* SHOW TABLES; */
+DESCRIBE usuarios;
+
+/* DROP TABLE IF EXISTS usuarios; */
+-- SQLBook: Code
+INSERT INTO usuarios(nombre, clave) VALUES ('MaritoPerez', 'Marito');
+SELECT * FROM usuarios;
+-- SQLBook: Code
+CREATE TABLE agenda (
+    nombre VARCHAR(20),
+    domicilio VARCHAR(30),
+    telefono VARCHAR(11)
+);
+
+DESCRIBE agenda;
+
+INSERT INTO agenda VALUES
+    ('Juan Perez', 'Colon 123', '4234567'),
+    ('Luis Garcia', 'Sucre 235', '4458787');
+
+SELECT * FROM agenda;
+-- SQLBook: Code
+/* ALTER TABLE a RENAME b;
+ALTER TABLE alumnos DROP COLUMN edad;
+ALTER TABLE productos DROP PRIMARY KEY;
+ALTER TABLE productos ADD en_oferta BOOLEAN;
+ALTER TABLE productos ADD sku VARCHAR(12) AFTER nombre;
+ALTER TABLE productos ADD id INT FIRST AUTO_INCREMENT;
+ALTER TABLE productos ADD PRIMARY KEY (id);
+ALTER TABLE productos MODIFY COLUMN nombre VARCHAR(32); */
+
+/* SELECT DISTINCT Country FROM Customers;
+SELECT COUNT(DISTINCT Country) FROM Customers; 
+SELECT * FROM Products
+WHERE Price BETWEEN 50 AND 60;*/
+
+-- SQLBook: Code
+CREATE TABLE libros(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(40),
+    autor VARCHAR(20),
+    editorial VARCHAR(15),
+    precio FLOAT,
+    cantidad INT 
+);
+
+INSERT INTO libros(titulo, autor, editorial, precio, cantidad) VALUES(
+    'El aleph',
+    'Borges',
+    'Emece',
+    23.50,
+    200
+), 
+(
+    'Alicia en el pais de las maravillas',
+    'Lewis Carroll',
+    'Paidos',
+    33.50,
+    100
+),
+(
+    'Antologia poetica',
+    'Borges',
+    'Emece',
+    40.50,
+    200
+),
+(
+    'Cumbres borrascosas',
+    'Cervantes',
+    'Paidos',
+    10.00,
+    100);
+
+SELECT precio, cantidad FROM libros;
+SELECT titulo, autor FROM libros;
+SELECT * FROM libros WHERE editorial = 'Paidos';
+SELECT * FROM libros WHERE precio > 24;
+SELECT * FROM libros WHERE editorial = 'Emece' AND precio > 20;
+SELECT * FROM libros WHERE precio > 30 OR editorial = 'Paidos';
+UPDATE libros SET precio = 15.25, cantidad = 150 WHERE precio = 11.25; /* UPDATE */
+SELECT * FROM libros
+WHERE precio BETWEEN 20 AND 40;
+SELECT * FROM libros
+ORDER BY editorial DESC, autor ASC;
