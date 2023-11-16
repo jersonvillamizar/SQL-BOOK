@@ -1,0 +1,59 @@
+-- SQLBook: Code
+USE JersonDB;
+
+DELIMITER //
+CREATE FUNCTION CONCATENAR(NOMBRES VARCHAR(255), APELLIDOS VARCHAR(255))
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE CONCATENAR VARCHAR(255);
+    SET CONCATENAR = CONCAT(NOMBRES, ' --> Pertenece al Fabricante: ', APELLIDOS);
+    RETURN CONCATENAR;
+END
+// DELIMITER;
+DROP FUNCTION CONCATENAR;
+
+SELECT CONCATENAR(p.nombre, f.nombre) FROM Producto p 
+INNER JOIN Fabricante f ON p.id_fabricante = f.id_fabricante;
+-- SQLBook: Code
+DROP TABLE IF EXISTS sitios;
+
+CREATE TABLE sitios (
+    id VARCHAR(255),
+    cant_paginas INT,
+    estrella INT,
+    PRIMARY KEY (id)
+);
+
+insert into sitios(id,cant_paginas,estrella) values ('lanacion.com.ar',17000000,3),
+ ('clarin.com',42000000,3),
+ ('infobae.com',33000000,5),
+ ('lavoz.com.ar',25000000,2);
+
+DROP FUNCTION IF EXISTS f_estrellas;
+
+delimiter //
+CREATE FUNCTION f_estrellas(cant TINYINT)
+  RETURNS VARCHAR(15)
+  DETERMINISTIC
+ BEGIN
+   DECLARE estrellas VARCHAR(15) DEFAULT '';
+   DECLARE x INT DEFAULT 0;
+   WHILE x<cant DO
+     SET estrellas=concat(estrellas,'*');
+     SET x=x+1;
+   END WHILE;
+   RETURN estrellas;
+ end //
+DELIMITER; 
+ 
+SELECT id AS Web_Hotel,f_estrellas(estrella) AS '#estrellas' from sitios;
+
+-- SQLBook: Code
+SELECT nombre FROM Producto 
+WHERE SUBSTRING(nombre, 2, 1) LIKE 'e%';
+
+SELECT nombre FROM Producto 
+WHERE SUBSTRING(nombre, 2, 1) REGEXP '^[aeiouAEIOU]';
+
+SELECT * FROM Producto;

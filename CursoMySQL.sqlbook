@@ -1,0 +1,2 @@
+-- SQLBook: Code
+SELECT DISTINCT city FROM station WHERE city LIKE IN ('%a', '%e', '%i', '%o', '%u') 
