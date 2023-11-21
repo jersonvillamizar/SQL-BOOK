@@ -1,4 +1,6 @@
 -- SQLBook: Code
+CREATE DATABASE IF NOT EXISTS `JersonDB`;
+USE `JersonDB`;
 DROP TABLE IF EXISTS `Instructores_Curso_Ruta`;
 DROP TABLE IF EXISTS `Cursos_Instructor`;
 DROP TABLE IF EXISTS `Aprendices`;
@@ -16,13 +18,6 @@ CREATE TABLE IF NOT EXISTS `Instructores`(
     `instructor` VARCHAR(255) NOT NULL,
     `especialidad` VARCHAR(255) NOT NULL
 ) AUTO_INCREMENT=1;
-/* CREATE TABLE IF NOT EXISTS `Cursos en carrera`(
-    `id_curso_carrera` INT AUTO_INCREMENT PRIMARY KEY,
-    `id_carrera` INT,
-    `id_curso` INT,
-    FOREIGN KEY(`id_carrera`) REFERENCES `Carrera`(`id_carrera`),
-    FOREIGN KEY(`id_curso`) REFERENCES `Curso`(`id_curso`)
-)AUTO_INCREMENT=1; */
 CREATE TABLE IF NOT EXISTS `Cursos`(
     `id_curso` INT AUTO_INCREMENT PRIMARY KEY,
     `curso` VARCHAR(255) NOT NULL
@@ -66,7 +61,6 @@ CREATE TABLE IF NOT EXISTS `Matriculas`(
     FOREIGN KEY (`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
 );
 ALTER TABLE `Matriculas`ADD `Estado_Matricula` VARCHAR(45) NOT NULL;
-DESCRIBE `Matriculas`;
 INSERT INTO `Instructores`(`id_instructor`,`instructor`, `especialidad`) VALUES
 (1, 'Ricardo Vicente Jaimes', 'Sistemas'),
 (2, 'Marinela Narvaez', 'Salud Ocupacional'),
@@ -75,7 +69,6 @@ INSERT INTO `Instructores`(`id_instructor`,`instructor`, `especialidad`) VALUES
 (5, 'Roy Hernando Llamas', 'Ingles'),
 (6, 'Maria Jimena Monsalve', 'Electronica');
 SELECT * FROM `Instructores`;
-DELETE FROM `Instructores`;
 INSERT INTO `Cursos`(`curso`) VALUES
 ('Matematicas Basicas'),
 ('Algebra Computacional'),
@@ -195,11 +188,6 @@ SELECT * FROM `Instructores_Curso_Ruta`;
 /* 5. Seleccionar los nombres y edades de aprendices que están cursando la 
 carrera de electrónica.
  */
-DESCRIBE `Aprendices`;
-DESCRIBE `Rutas`;
-DESCRIBE `Matriculas`;
-SELECT * FROM `Rutas`;
-SELECT * FROM `Aprendices`;
 SELECT a.`nombre`, a.`edad`, c.`carrera` 
 FROM `Aprendices` a, `Rutas` r, `Carreras` c 
 WHERE a.`id_ruta` = r.`id_ruta` 
@@ -241,14 +229,22 @@ AND r.`ruta` = 'Sistemas de Información Empresariales';
 mostrando el nombre del profesional, el nombre de la carrera y el énfasis de 
 la carrera (Nombre de la Ruta de aprendizaje)
  */
-
-SELECT a.`nombre`, i.`instructor`, r.`ruta`
-FROM `Aprendices` a, `Instructores` i, `Rutas` r, `Instructores_Curso_Ruta` i2, `Matriculas` m
-WHERE a.`id_ruta` = r.`id_ruta`
-AND r.`id_ruta` = i2.`id_ruta`
-AND i2.`id_instructor` = i.`id_instructor`
-AND m.`id_aprendiz` = a.`id_aprendiz`
+SELECT a.`nombre`, c.`carrera`, r.`ruta`, m.`Estado_Matricula`
+FROM `Aprendices` a, `carreras` c, `rutas` r, `matriculas` m
+WHERE m.`id_aprendiz` = a.`id_aprendiz`
+AND a.`id_ruta` = r.`id_ruta`
+AND r.`id_carrera` = c.`id_carrera`
 AND m.`estado_matricula` = 'Terminado';
 
-SELECT * FROM `Matriculas`;
-DESCRIBE `Matriculas`;
+/*10.Genere una consulta de datos que usted estime conveniente para dar valor 
+agregado al sistema.*/
+
+/*Selecciones los instructores que han dictado una ruta en estado 
+“En Ejecución”.*/
+
+SELECT DISTINCT i.`instructor`, r.`ruta`, m.`estado_matricula`
+FROM `Instructores` i, `Instructores_Curso_Ruta` i2, `Rutas` r, `Matriculas` m
+WHERE i.`id_instructor` = i2.`id_instructor`
+AND i2.`id_ruta` = r.`id_ruta`
+AND r.`id_ruta` = m.`id_ruta`
+AND m.`estado_matricula` = 'En Ejecución';
