@@ -1,0 +1,68 @@
+-- SQLBook: Code
+USE JersonDB;
+
+ALTER TABLE `Aprendices` ADD COLUMN `sexo` VARCHAR(255) AFTER `nombre`;
+
+SELECT * FROM `Aprendices`;
+
+UPDATE `Aprendices` SET `sexo` = 'M' WHERE `id_aprendiz` = 1;
+UPDATE `Aprendices` SET `sexo` = 'F' WHERE `id_aprendiz` = 2;
+UPDATE `Aprendices` SET `sexo` = 'M' WHERE `id_aprendiz` = 3;
+UPDATE `Aprendices` SET `sexo` = 'F' WHERE `id_aprendiz` = 4;
+UPDATE `Aprendices` SET `sexo` = 'M' WHERE `id_aprendiz` = 5;
+UPDATE `Aprendices` SET `sexo` = 'F' WHERE `id_aprendiz` = 6;
+UPDATE `Aprendices` SET `sexo` = 'M' WHERE `id_aprendiz` = 7;
+UPDATE `Aprendices` SET `sexo` = 'F' WHERE `id_aprendiz` = 8;
+UPDATE `Aprendices` SET `sexo` = 'M' WHERE `id_aprendiz` = 9;
+UPDATE `Aprendices` SET `sexo` = 'F' WHERE `id_aprendiz` = 10;
+
+SELECT CASE 
+    WHEN `sexo` = 'M' THEN CONCAT('Bienvenido Señor', ' ', `nombre`) 
+    WHEN `sexo` = 'F' AND `edad` >= 21 THEN CONCAT('Bienvenida Señora', ' ', `nombre`) 
+    WHEN `sexo` = 'F' AND `edad` < 21 THEN CONCAT('Bienvenida Señorita', ' ', `nombre`)  
+END AS 'Llamado Formal'FROM `Aprendices`;
+
+ select `edad`, 
+    (SELECT 
+    IF(`sexo`='M',CONCAT('Bienvenido Señor', ' ', `nombre`),    
+    IF(`sexo`='F' && `edad`>=21, CONCAT('Bienvenida Señora', ' ', `nombre`),    
+    CONCAT('Bienvenida Señorita', ' ', `nombre`) 
+)
+)
+) as 'Llamado Formal' 
+ from `Aprendices`;
+
+DELIMITER //
+
+CREATE FUNCTION IF NOT EXISTS LLAMADO_FORMAL(`nombre` VARCHAR(255), `sexo` VARCHAR(255), `edad` VARCHAR(3))
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE LLAMADO_FORMAL VARCHAR(255);
+    SET LLAMADO_FORMAL = IF(`sexo`='M', CONCAT('Bienvenido Señor', ' ', `nombre`),    
+    IF(`sexo`='F' && `edad`>=21, CONCAT('Bienvenida Señora', ' ', `nombre`),    
+    CONCAT('Bienvenida Señorita', ' ', `nombre`) 
+)
+);
+    RETURN LLAMADO_FORMAL;
+END
+// DELIMITER;
+DROP FUNCTION IF EXISTS `LLAMADO_FORMAL`;
+
+SELECT LLAMADO_FORMAL(`nombre`, `sexo`, `edad`) FROM `Aprendices`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
