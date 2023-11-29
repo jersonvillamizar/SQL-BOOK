@@ -36,6 +36,7 @@ ALTER TABLE productos ADD en_oferta BOOLEAN;
 ALTER TABLE productos ADD sku VARCHAR(12) AFTER nombre;
 ALTER TABLE productos ADD id INT FIRST AUTO_INCREMENT;
 ALTER TABLE productos ADD PRIMARY KEY (id);
+ALTER TABLE productos CHANGE columna_nombre RENAME nuevo_nombre;
 ALTER TABLE productos MODIFY COLUMN nombre VARCHAR(32); */
 
 /* SELECT DISTINCT Country FROM Customers;
