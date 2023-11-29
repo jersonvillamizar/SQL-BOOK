@@ -1,0 +1,48 @@
+-- SQLBook: Code
+USE JersonStudy;
+
+/* 1 Leaf
+2 Inner
+3 Leaf
+5 Root
+6 Leaf
+8 Inner
+9 Leaf */
+
+CREATE TABLE BST(
+    N INT,
+    P INT
+);
+
+INSERT INTO BST(N, P)
+VALUES(1, 2), (3, 2), (6, 8), (9, 8), (2, 5), (8, 5), (5, NULL);
+
+SELECT * FROM BST;
+
+CREATE FUNCTION GetNodeType(N INT, P INT) RETURNS VARCHAR(10) DETERMINISTIC
+BEGIN
+    DECLARE NodeType VARCHAR(10);
+
+    SET NodeType = 
+        CASE
+            WHEN P IS NULL THEN 'Root'
+            WHEN N IN (SELECT P FROM BST) THEN 'Inner'
+            ELSE 'Leaf'
+        END;
+
+    RETURN NodeType;
+END;
+
+
+DROP FUNCTION GetNodeType;
+
+SELECT N, P, GetNodeType(N, P) FROM BST ORDER BY N;
+
+SELECT N,
+       CASE
+           WHEN P IS NULL THEN 'Root'
+           WHEN N IN (SELECT DISTINCT P FROM BST) THEN 'Inner'
+           ELSE 'Leaf'
+       END AS NodeType
+FROM BST
+ORDER BY N;

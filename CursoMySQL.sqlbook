@@ -150,4 +150,3 @@ FROM (
 ) AS Ranked
 GROUP BY rn
 ORDER BY rn;
--- SQLBook: Code
