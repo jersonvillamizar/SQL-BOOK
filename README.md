@@ -8,8 +8,6 @@
      SELECT nombre FROM tblusuarios;
    ```
 
-![alt text](C:\Users\Usuario\Downloads\logopng.png)
-
 2. Calcular el saldo máximo de los usuarios de sexo “Mujer”
 
      ```sql
