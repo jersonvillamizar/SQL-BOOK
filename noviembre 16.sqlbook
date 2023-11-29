@@ -1,6 +1,4 @@
 -- SQLBook: Code
-CREATE DATABASE IF NOT EXISTS `JersonDB`;
-USE `JersonDB`;
 DROP TABLE IF EXISTS `Instructores_Curso_Ruta`;
 DROP TABLE IF EXISTS `Cursos_Instructor`;
 DROP TABLE IF EXISTS `Aprendices`;
@@ -18,6 +16,13 @@ CREATE TABLE IF NOT EXISTS `Instructores`(
     `instructor` VARCHAR(255) NOT NULL,
     `especialidad` VARCHAR(255) NOT NULL
 ) AUTO_INCREMENT=1;
+/* CREATE TABLE IF NOT EXISTS `Cursos en carrera`(
+    `id_curso_carrera` INT AUTO_INCREMENT PRIMARY KEY,
+    `id_carrera` INT,
+    `id_curso` INT,
+    FOREIGN KEY(`id_carrera`) REFERENCES `Carrera`(`id_carrera`),
+    FOREIGN KEY(`id_curso`) REFERENCES `Curso`(`id_curso`)
+)AUTO_INCREMENT=1; */
 CREATE TABLE IF NOT EXISTS `Cursos`(
     `id_curso` INT AUTO_INCREMENT PRIMARY KEY,
     `curso` VARCHAR(255) NOT NULL
@@ -61,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `Matriculas`(
     FOREIGN KEY (`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
 );
 ALTER TABLE `Matriculas`ADD `Estado_Matricula` VARCHAR(45) NOT NULL;
+DESCRIBE `Matriculas`;
 INSERT INTO `Instructores`(`id_instructor`,`instructor`, `especialidad`) VALUES
 (1, 'Ricardo Vicente Jaimes', 'Sistemas'),
 (2, 'Marinela Narvaez', 'Salud Ocupacional'),
@@ -69,6 +75,7 @@ INSERT INTO `Instructores`(`id_instructor`,`instructor`, `especialidad`) VALUES
 (5, 'Roy Hernando Llamas', 'Ingles'),
 (6, 'Maria Jimena Monsalve', 'Electronica');
 SELECT * FROM `Instructores`;
+DELETE FROM `Instructores`;
 INSERT INTO `Cursos`(`curso`) VALUES
 ('Matematicas Basicas'),
 ('Algebra Computacional'),
@@ -174,7 +181,7 @@ INSERT INTO `Matriculas`() VALUES
 
 /* 2. Agregue a el campo edad a la tabla de Aprendices.
  */
- ALTER TABLE `Aprendices` ADD `edad` VARCHAR(3);
+ALTER TABLE `Aprendices` ADD `edad` VARCHAR(3);
 UPDATE `Aprendices`SET Edad = FLOOR(RAND() * 10) + 18;
 
 /* 3. Si suponemos que los cursos tienen una duración diferente dependiendo 
@@ -188,6 +195,11 @@ SELECT * FROM `Instructores_Curso_Ruta`;
 /* 5. Seleccionar los nombres y edades de aprendices que están cursando la 
 carrera de electrónica.
  */
+DESCRIBE `Aprendices`;
+DESCRIBE `Rutas`;
+DESCRIBE `Matriculas`;
+SELECT * FROM `Rutas`;
+SELECT * FROM `Aprendices`;
 SELECT a.`nombre`, a.`edad`, c.`carrera` 
 FROM `Aprendices` a, `Rutas` r, `Carreras` c 
 WHERE a.`id_ruta` = r.`id_ruta` 

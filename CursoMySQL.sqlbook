@@ -1,2 +1,153 @@
 -- SQLBook: Code
-SELECT DISTINCT city FROM station WHERE city LIKE IN ('%a', '%e', '%i', '%o', '%u') 
+SELECT DISTINCT CITY
+FROM STATION
+WHERE SUBSTRING(CITY, -1) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE RIGHT(CITY, 1) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT CITY
+FROM STATION
+WHERE LOWER(SUBSTRING(CITY, 1, 1)) IN ('a', 'e', 'i', 'o', 'u')
+  AND LOWER(SUBSTRING(CITY, -1)) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT city 
+FROM station 
+WHERE LOWER(LEFT(city, 1)) IN ('a', 'e', 'i', 'o', 'u') 
+AND LOWER(RIGHT(city, 1)) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT city 
+FROM station WHERE NOT LOWER(LEFT(city, 1)) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT DISTINCT city 
+FROM station 
+WHERE NOT LOWER(LEFT(city, 1)) IN ('a', 'e', 'i', 'o', 'u') 
+OR NOT LOWER(RIGHT(city, 1)) IN ('a', 'e', 'i', 'o', 'u');
+
+SELECT name FROM students WHERE (marks > 75) 
+ORDER BY SUBSTRING(name, -3), id;
+
+SELECT ROUND(LAT_N, 4) AS Median_Latitude
+FROM (
+    SELECT LAT_N,
+           ROW_NUMBER() OVER (ORDER BY LAT_N) AS RowAsc,
+           ROW_NUMBER() OVER (ORDER BY LAT_N DESC) AS RowDesc
+    FROM STATION
+) AS Subquery
+WHERE RowAsc = RowDesc OR RowAsc + 1 = RowDesc OR RowAsc - 1 = RowDesc;
+
+CREATE DATABASE IF NOT EXISTS `JersonStudy`;
+
+USE `JersonStudy`;
+
+CREATE TABLE STATION (
+    ID INT,
+    CITY VARCHAR(50),
+    LAT_N DECIMAL(8, 6)
+);
+
+DROP TABLE STATION;
+
+INSERT INTO STATION VALUES
+(1, 'New York', 40.7128),
+(2, 'Los Angeles', 34.0522),
+(3, 'Chicago', 41.8781),
+(4, 'Houston', 29.7604),
+(5, 'Miami', 25.7617),
+(6, 'Denver', 39.7392),
+(7, 'Seattle', 47.6062),
+(8, 'Boston', 42.3601);
+
+SELECT* FROM STATION;
+/* A median is defined as a number separating the higher half of a data set 
+from the lower half. Query the median of the Northern Latitudes (LAT_N) 
+from STATION and round your answer to 4 decimal places
+ */
+SELECT
+DISTINCT ID, LAT_N, RowAsc, RowDesc
+FROM (
+  SELECT
+    ID,
+    LAT_N,
+    ROW_NUMBER() OVER (ORDER BY LAT_N) AS RowAsc,
+    ROW_NUMBER() OVER (ORDER BY LAT_N DESC) AS RowDesc
+  FROM STATION
+) AS Subquery
+WHERE RowAsc = RowDesc OR RowAsc + 1 = RowDesc OR RowAsc - 1 = RowDesc;
+SELECT ROUND(AVG(LAT_N),4) AS Median_Latitude
+FROM (
+    SELECT LAT_N,
+           ROW_NUMBER() OVER (ORDER BY LAT_N) AS RowAsc,
+           ROW_NUMBER() OVER (ORDER BY LAT_N DESC) AS RowDesc
+    FROM STATION
+) AS Subquery
+WHERE RowAsc = RowDesc OR RowAsc + 1 = RowDesc OR RowAsc - 1 = RowDesc;
+
+/* Triangulos */
+SELECT 
+    CASE 
+        WHEN A + B <= C OR B + C <= A OR C + A <= B THEN 'Not A Triangle'
+        WHEN A = B AND B = C THEN 'Equilateral'
+        WHEN (A = B) OR (B = C) OR (C = A) THEN 'Isosceles'
+        ELSE 'Scalene'
+    END AS TriangleType
+FROM TRIANGLES;
+
+-- SQLBook: Code
+/* Pivot the Occupation column in OCCUPATIONS so that each Name is sorted 
+alphabetically and displayed underneath its corresponding Occupation. 
+The output column headers should be Doctor, Professor, Singer, and Actor, 
+respectively.
+Note: Print NULL when there are no more names corresponding to an occupation. */
+
+CREATE TABLE OCCUPATIONS (
+id_persona INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(50),
+occupation VARCHAR(50)
+)AUTO_INCREMENT=1;
+
+DROP TABLE OCCUPATIONS;
+
+-- Insertar nuevos datos en la tabla OCCUPATIONS
+INSERT INTO OCCUPATIONS (Name, Occupation)
+VALUES
+    ('Carlos', 'Doctor'),
+    ('Marta', 'Profesor'),
+    ('Alejandro', 'Cantante'),
+    ('Laura', 'Actor'),
+    ('Roberto', 'Doctor'),
+    ('Sofía', 'Profesor'),
+    ('Diego', 'Cantante'),
+    ('Ana', 'Actor'),
+    ('Luisa', 'Doctor'),
+    ('Javier', 'Profesor'),
+    ('Elena', 'Cantante'),
+    ('Ivan', 'Actor'),
+    ('Pedro', 'Doctor'),
+    ('Isabel', 'Profesor'),
+    ('Carmen', 'Cantante'),
+    ('Fernando', 'Actor'),
+    ('Miguel', 'Doctor'),
+    ('Raquel', 'Profesor'),
+    ('Marina', 'Cantante'),
+    ('Alberto', 'Actor'),
+    ('Jerson', 'Actor');
+
+    DELETE FROM OCCUPATIONS;
+/*     SELECT * FROM OCCUPATIONS;*/
+ SELECT
+  MAX(CASE WHEN Occupation = 'Doctor' THEN Name END) AS Doctor,
+  MAX(CASE WHEN Occupation = 'Profesor' THEN Name END) AS Professor,
+  MAX(CASE WHEN Occupation = 'Cantante' THEN Name END) AS Singer,
+  MAX(CASE WHEN Occupation = 'Actor' THEN Name END) AS Actor
+FROM (
+  SELECT
+    Name,
+    Occupation,
+    ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS rn
+  FROM OCCUPATIONS
+) AS Ranked
+GROUP BY rn
+ORDER BY rn;
+-- SQLBook: Code
