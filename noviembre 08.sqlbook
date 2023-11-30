@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS Producto (
     id_fabricante INT,
     FOREIGN KEY (id_fabricante) REFERENCES Fabricante(id_fabricante)
 ) AUTO_INCREMENT = 1;
+
 DESCRIBE Producto;
 DESCRIBE Fabricante;
 INSERT INTO Fabricante(nombre) VALUES ('Asus'), ('Lenovo'), ('Hewlett-Packard'), ('Samsung'), ('Seagate'), ('Crucial'), ('Gigabyte'), ('Huawei');
