@@ -1,0 +1,262 @@
+-- SQLBook: Code
+DROP TABLE IF EXISTS `Instructores_Curso_Ruta`;
+DROP TABLE IF EXISTS `Cursos_Instructor`;
+DROP TABLE IF EXISTS `Aprendices`;
+DROP TABLE IF EXISTS `Cursos en carrera`;
+DROP TABLE IF EXISTS `Matriculas`;
+
+DROP TABLE IF EXISTS `Rutas`;
+DROP TABLE IF EXISTS `Carreras`;
+DROP TABLE IF EXISTS `Cursos`;
+DROP TABLE IF EXISTS `Instructores`;
+DROP TABLE IF EXISTS `Cursos_Instructor`;
+
+CREATE TABLE IF NOT EXISTS `Instructores`(
+    `id_instructor` INT AUTO_INCREMENT PRIMARY KEY,
+    `instructor` VARCHAR(255) NOT NULL,
+    `especialidad` VARCHAR(255) NOT NULL
+) AUTO_INCREMENT=1;
+/* CREATE TABLE IF NOT EXISTS `Cursos en carrera`(
+    `id_curso_carrera` INT AUTO_INCREMENT PRIMARY KEY,
+    `id_carrera` INT,
+    `id_curso` INT,
+    FOREIGN KEY(`id_carrera`) REFERENCES `Carrera`(`id_carrera`),
+    FOREIGN KEY(`id_curso`) REFERENCES `Curso`(`id_curso`)
+)AUTO_INCREMENT=1; */
+CREATE TABLE IF NOT EXISTS `Cursos`(
+    `id_curso` INT AUTO_INCREMENT PRIMARY KEY,
+    `curso` VARCHAR(255) NOT NULL
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Carreras`(
+    `id_carrera` INT AUTO_INCREMENT PRIMARY KEY,
+    `carrera` VARCHAR(255) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS `Rutas`(
+    `id_ruta` INT AUTO_INCREMENT PRIMARY KEY,
+    `ruta` VARCHAR(255) NOT NULL,
+    `id_carrera` INT,
+    FOREIGN KEY(`id_carrera`) REFERENCES `Carreras`(`id_carrera`)
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Aprendices`(
+    `id_aprendiz` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(255) NOT NULL,
+    `id_ruta` INT,
+    FOREIGN KEY(`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Cursos_Instructor`(
+    `id_instructor` INT,
+    `id_curso` INT,
+    FOREIGN KEY(`id_instructor`) REFERENCES `Instructores`(`id_instructor`),
+    FOREIGN KEY(`id_curso`) REFERENCES `Cursos`(`id_curso`)
+);
+CREATE TABLE IF NOT EXISTS `Instructores_Curso_Ruta`(
+    `id_ruta` INT,
+    `id_curso` INT,
+    `id_instructor` INT,
+    FOREIGN KEY(`id_instructor`) REFERENCES `Instructores`(`id_instructor`),
+    FOREIGN KEY(`id_curso`) REFERENCES `Cursos`(`id_curso`),
+    FOREIGN KEY(`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
+);
+-- SQLBook: Code
+DROP TABLE IF EXISTS `Matriculas`;
+CREATE TABLE IF NOT EXISTS `Matriculas`(
+    `id_aprendiz` INT,
+    `id_ruta` INT,
+    FOREIGN KEY (`id_aprendiz`) REFERENCES `Aprendices`(`id_aprendiz`),
+    FOREIGN KEY (`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
+);
+ALTER TABLE `Matriculas`ADD `Estado_Matricula` VARCHAR(45) NOT NULL;
+DESCRIBE `Matriculas`;
+INSERT INTO `Instructores`(`id_instructor`,`instructor`, `especialidad`) VALUES
+(1, 'Ricardo Vicente Jaimes', 'Sistemas'),
+(2, 'Marinela Narvaez', 'Salud Ocupacional'),
+(3, 'Agustin Parra Granados', 'Soldadura'),
+(4, 'Nelson Raul Buitrago', 'Mecanica'),
+(5, 'Roy Hernando Llamas', 'Ingles'),
+(6, 'Maria Jimena Monsalve', 'Electronica');
+SELECT * FROM `Instructores`;
+DELETE FROM `Instructores`;
+INSERT INTO `Cursos`(`curso`) VALUES
+('Matematicas Basicas'),
+('Algebra Computacional'),
+('Programacion Basica'),
+('Ingles'),
+('Electronica Basica'),
+('Motor de Cuatro Tiempos'),
+('Enfermedades Laborales'),
+('Higiene Postural en el Trabajo'),
+('Ergonomia'),
+('Legislacion Laboral en Colombia'),
+('Materiales de Soldadura'),
+('Metodos de Soldadura'),
+('Fusion de Metales'),
+('Buceo 1'),
+('Buceo 2'),
+('Riesgo Electrico'),
+('Bases de Datos Relacionales'),
+('Bases de Datos NO Relacionales'),
+('Electronica Digital'),
+('Microprocesadores');
+SELECT * FROM `Cursos`;
+INSERT INTO `Carreras` (`id_carrera`, `carrera`) VALUES
+(1, 'Desarrollo de Software'),
+(2, 'Electronica'),
+(3, 'Mecanica Automotriz'),
+(4, 'Seguridad y Salud Ocupacional'),
+(5, 'Soldadura');
+SELECT * FROM `Carreras`;
+DELETE FROM `Carreras`;
+INSERT INTO `Rutas` (`id_ruta`, `ruta`, `id_carrera`) VALUES
+(1, 'Sistemas de Informacion Empresariales', 1),
+(2, 'Videojuegos', 2),
+(3, 'Machine Learning', 3),
+(4, 'Microcontroladores', 2),
+(5, 'Robotica', 3),
+(6, 'Dispositivos Bio-medicos', 4),
+(7, 'Motores Hibridos', 3),
+(8, 'Vehiculos de Uso Agricola', 5),
+(9, 'Sistemas de Gestion en Seguridad Ocupacional', 4),
+(10, 'Soldadura Autogena Industrial', 5),
+(11, 'Soldadura Electrica Industrial', 5),
+(12, 'Soldadura Submarina', 5);
+SELECT * FROM `Rutas`;
+INSERT INTO `Instructores_Curso_Ruta`(`id_ruta`, `id_curso`, `id_instructor`) VALUES
+(1, 1, NULL),
+(1, 2, NULL),
+(1, 3, 1),
+(1, 4, NULL),
+(1, 17, 1),
+(1, 18, NULL),
+(2, 1, NULL),
+(2, 3, NULL),
+(2, 4, NULL),
+(2, 20, 6),
+(3, 17, 5),
+(3, 18, 5),
+(4, 5, 6),
+(5, 19, 6),
+(8, 4, NULL),
+(8, 6, 4),
+(10, 1, NULL),
+(10, 4, NULL),
+(10, 12, 2),
+(10, 13, NULL),
+(10, 16, NULL),
+(11, 10, 3),
+(12, 11, 3);
+
+DELETE FROM `Instructores_Curso_Ruta`;
+SELECT * FROM `Instructores_Curso_Ruta`;
+DESCRIBE `Instructores_Curso_Ruta`;
+DESCRIBE `Instructores`;
+SELECT * FROM `Instructores`;
+SELECT * FROM `Cursos`;
+SELECT * FROM `Rutas`;
+
+INSERT INTO `Aprendices` (`id_aprendiz`, `nombre`, `id_ruta`) VALUES
+(1, 'Juan Perez', 3),
+(2, 'Ana Rodriguez', 7),
+(3, 'Carlos Lopez', 1),
+(4, 'Maria Sanchez', 10),
+(5, 'Pedro Garcia', 5),
+(6, 'Laura Martinez', 8),
+(7, 'Miguel Torres', 2),
+(8, 'Isabel Diaz', 12),
+(9, 'Andres Ramirez', 4),
+(10, 'Carmen Gutierrez', 9);
+
+/* 1. Agregue un campo Estado_Matrícula a la tabla Matrícula que indique si el 
+estudiante se encuentra “En Ejecución”, “Terminado” o “Cancelado” */
+INSERT INTO `Matriculas`() VALUES
+(1, 1, 'En Ejecucion'),
+(2, 1, 'Terminado'),
+(3, 1, 'Cancelado'),
+(4, 3, 'En Ejecucion'),
+(5, 3, 'Terminado'),
+(6, 5, 'Terminado'),
+(7, 5, 'En Ejecucion'),
+(8, 5, 'Cancelado'),
+(9, 11, 'Cancelado'),
+(10, 11, 'En Ejecucion');
+
+/* 2. Agregue a el campo edad a la tabla de Aprendices.
+ */
+ALTER TABLE `Aprendices` ADD `edad` VARCHAR(3);
+UPDATE `Aprendices`SET Edad = FLOOR(RAND() * 10) + 18;
+
+/* 3. Si suponemos que los cursos tienen una duración diferente dependiendo 
+de la ruta que lo contenga ¿Qué modificación haría a la estructura de datos ya 
+planteada?
+ */
+ALTER TABLE `Instructores_Curso_Ruta` ADD `duracion(Semanas)` INT;
+UPDATE `Instructores_Curso_Ruta` SET `duracion(Semanas)` = FLOOR(RAND() * 10) + 1;
+SELECT * FROM `Instructores_Curso_Ruta`;
+
+/* 5. Seleccionar los nombres y edades de aprendices que están cursando la 
+carrera de electrónica.
+ */
+DESCRIBE `Aprendices`;
+DESCRIBE `Rutas`;
+DESCRIBE `Matriculas`;
+SELECT * FROM `Rutas`;
+SELECT * FROM `Aprendices`;
+SELECT a.`nombre`, a.`edad`, c.`carrera` 
+FROM `Aprendices` a, `Rutas` r, `Carreras` c 
+WHERE a.`id_ruta` = r.`id_ruta` 
+AND r.`id_carrera` = c.`id_carrera` AND c.`carrera` = 'Electronica';
+
+SELECT DISTINCT a.`nombre`, a.`edad`, c.`carrera`
+FROM `Aprendices` a
+INNER JOIN `Rutas` r ON a.`id_ruta` = r.`id_ruta`
+INNER JOIN `Carreras` c ON r.`id_carrera`= c.`id_carrera`
+WHERE c.`carrera` = 'Electronica';
+
+/* 6. Seleccionar Nombres de Aprendices junto al nombre de la ruta de 
+aprendizaje que cancelaron.
+ */
+ DESCRIBE `Matriculas`;
+SELECT DISTINCT a.`nombre`, r.`ruta`, m.`estado_matricula`
+FROM `Aprendices` a, `Rutas` r, `Matriculas` m
+WHERE a.`id_ruta` = r.`id_ruta` 
+AND m.`id_aprendiz` = a.`id_aprendiz` 
+AND m.`estado_matricula` = 'Cancelado';
+
+/* 7. Seleccionar Nombre de los cursos que no tienen un instructor asignado.
+ */
+SELECT DISTINCT c.`curso`, i.`id_instructor` AS `Estado`
+FROM `Cursos` c, `Instructores_Curso_Ruta` i
+WHERE c.`id_curso` = i.`id_curso` AND i.`id_instructor` IS NULL;
+
+/* 8. Seleccionar Nombres de los instructores que dictan cursos en la ruta de 
+aprendizaje “Sistemas de Información Empresariales”.
+ */
+DESCRIBE `Instructores`;
+SELECT DISTINCT i.`instructor`, r.`ruta`
+FROM `Instructores` i, `Instructores_Curso_Ruta` i2, `Rutas` r
+WHERE i.`id_instructor` = i2.`id_instructor`
+AND i2.`id_ruta` = r.`id_ruta`
+AND r.`ruta` = 'Sistemas de Información Empresariales';
+
+/* 9. Genere un listado de todos los aprendices que terminaron una Carrera 
+mostrando el nombre del profesional, el nombre de la carrera y el énfasis de 
+la carrera (Nombre de la Ruta de aprendizaje)
+ */
+SELECT a.`nombre`, c.`carrera`, r.`ruta`, m.`Estado_Matricula`
+FROM `Aprendices` a, `carreras` c, `rutas` r, `matriculas` m
+WHERE m.`id_aprendiz` = a.`id_aprendiz`
+AND a.`id_ruta` = r.`id_ruta`
+AND r.`id_carrera` = c.`id_carrera`
+AND m.`estado_matricula` = 'Terminado';
+
+/*10.Genere una consulta de datos que usted estime conveniente para dar valor 
+agregado al sistema.*/
+
+/*Selecciones los instructores que han dictado una ruta en estado 
+“En Ejecución”.*/
+
+SELECT DISTINCT i.`instructor`, r.`ruta`, m.`estado_matricula`
+FROM `Instructores` i, `Instructores_Curso_Ruta` i2, `Rutas` r, `Matriculas` m
+WHERE i.`id_instructor` = i2.`id_instructor`
+AND i2.`id_ruta` = r.`id_ruta`
+AND r.`id_ruta` = m.`id_ruta`
+AND m.`estado_matricula` = 'En Ejecución';

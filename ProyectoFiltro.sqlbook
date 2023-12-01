@@ -1,0 +1,3 @@
+-- SQLBook: Code
+CREATE DATABASE IF NOT EXISTS ProyectoFiltro;
+USE ProyectoFiltro;
