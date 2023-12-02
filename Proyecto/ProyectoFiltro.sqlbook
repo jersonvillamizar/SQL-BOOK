@@ -108,7 +108,7 @@ VALUES
 
 SELECT * FROM Cursos;
 
-/* Agregue un campo Estado_Matrícula a la tabla Matrícula que indique si el
+/* 1 Agregue un campo Estado_Matrícula a la tabla Matrícula que indique si el
 estudiante se encuentra “En Ejecución”, “Terminado” o “Cancelado” */
 
 CREATE TABLE IF NOT EXISTS `Matriculas`(
@@ -118,18 +118,18 @@ CREATE TABLE IF NOT EXISTS `Matriculas`(
 )AUTO_INCREMENT=1;
 ALTER TABLE `Matriculas`ADD `estado` VARCHAR(45) NOT NULL AFTER `id_matricula`;
 
-/* Agregue a el campo edad a la tabla de Aprendices.
+/* 2 Agregue a el campo edad a la tabla de Aprendices.
  */
 
 ALTER TABLE `Aprendices` ADD `edad` VARCHAR(3) AFTER `apellido`;
 
-/* Si suponemos que los cursos tienen una duración diferente
+/* 3  Si suponemos que los cursos tienen una duración diferente
 dependiendo de la ruta que lo contenga ¿qué modificación haría a la
 estructura de datos ya planteada? */
 
 ALTER TABLE `Cursos` ADD `duracion` INT NOT NULL AFTER `nombre_curso`;
 
-/* Seleccionar los nombres y edades de aprendices que están cursando la
+/* 4 Seleccionar los nombres y edades de aprendices que están cursando la
 carrera de electrónica. */
 
 SELECT a.nombre AS Nombre, a.apellido AS Apellido, a.edad AS Edad
