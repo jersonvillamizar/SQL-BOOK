@@ -1,0 +1,139 @@
+-- SQLBook: Code
+CREATE DATABASE IF NOT EXISTS ProyectoFiltro;
+USE ProyectoFiltro;
+
+DROP TABLE IF EXISTS `Aprendices`;
+DROP TABLE IF EXISTS `Matriculas`;
+DROP TABLE IF EXISTS `Rutas`;
+DROP TABLE IF EXISTS `Carreras`;
+DROP TABLE IF EXISTS `Cursos`;
+DROP TABLE IF EXISTS `Instructores`;
+
+CREATE TABLE IF NOT EXISTS `Instructores`(
+    `id_instructor` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre_instructor` VARCHAR(255) NOT NULL,
+    `especialidad` VARCHAR(255) NOT NULL
+) AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Carreras`(
+    `id_carrera` INT AUTO_INCREMENT PRIMARY KEY,
+    `carrera` VARCHAR(255) NOT NULL
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Rutas`(
+    `id_ruta` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre_ruta` VARCHAR(255) NOT NULL,
+    `id_carrera` INT,
+    FOREIGN KEY(`id_carrera`) REFERENCES `Carreras`(`id_carrera`)
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Cursos`(
+    `id_curso` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre_curso` VARCHAR(255) NOT NULL,
+    `id_instructor` INT,
+    FOREIGN KEY(`id_instructor`) REFERENCES `Instructores`(`id_instructor`)
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Aprendices`(
+    `id_aprendiz` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(255) NOT NULL,
+    `apellido` VARCHAR(255) NOT NULL,
+    `id_ruta` INT,
+    FOREIGN KEY(`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
+)AUTO_INCREMENT=1;
+CREATE TABLE IF NOT EXISTS `Cursos_Por_Ruta`(
+    nombre_curso_por_ruta VARCHAR(255),
+    id_curso INT,
+    id_ruta INT,
+    FOREIGN KEY(`id_curso`) REFERENCES `Cursos`(`id_curso`),
+    FOREIGN KEY(`id_ruta`) REFERENCES `Rutas`(`id_ruta`)
+);
+
+INSERT INTO Instructores (id_instructor, nombre_instructor, especialidad)
+VALUES
+(1, 'Ricardo Vicente Jaimes', 'Sistemas'),
+(2, 'Marinela Narvaez', 'Salud Ocupacional'),
+(3, 'Agustin Parra Granados', 'Soldadura'),
+(4, 'Nelson Raul Buitrago', 'Mecanica'),
+(5, 'Roy Hernando Llamas', 'Ingles'),
+(6, 'Maria Jimena Monsalve', 'Electronica'),
+(7, 'Juan Carlos Cobos', 'Electronica'),
+(8, 'Pedro Nell Santamaria', 'Sistemas'),
+(9, 'Andrea Gonzalez', 'Sistemas'),
+(10, 'Marisela Sevilla', 'Salud Ocupacional');
+
+INSERT INTO Carreras (id_carrera, carrera)
+VALUES
+(1, 'Desarrollo de Software'),
+(2, 'Electronica'),
+(3, 'Mecanica Automotriz'),
+(4, 'Seguridad y Salud Ocupacional'),
+(5, 'Soldadura');
+
+INSERT INTO Rutas (id_ruta, nombre_ruta, id_carrera)
+VALUES
+(1, 'Sistemas de Informacion Empresariales', 1),
+(2, 'Videojuegos', 1),
+(3, 'Machine Learning', 1),
+(4, 'Microcontroladores', 2),
+(5, 'Robotica', 2),
+(6, 'Dispositivos Bio-medicos', NULL),
+(7, 'Motores Hibridos', NULL),
+(8, 'Vehiculos de Uso Agricola', NULL),
+(9, 'Sistemas de Gestion en Seguridad Ocupacional', NULL),
+(10, 'Soldadura Autogena Industrial', 5),
+(11, 'Soldadura Electrica Industrial', 5),
+(12, 'Soldadura Submarina', NULL);
+
+ALTER TABLE `Cursos` ALTER COLUMN `duracion` SET DEFAULT 6; 
+
+INSERT INTO Cursos (id_curso, nombre_curso, id_instructor)
+VALUES
+(1, 'Matematicas Basicas', 4),
+(2, 'Algebra Computacional', 1),
+(3, 'Programacion Basica', 3),
+(4, 'Ingles', 5),
+(5, 'Electronica Basica', 7),
+(6, 'Motor de Cuatro Tiempos', NULL),
+(7, 'Enfermedades Laborales', NULL),
+(8, 'Higiene Postural en el Trabajo', NULL),
+(9, 'Ergonomia', NULL),
+(10, 'Legislacion Laboral en Colombia', NULL),
+(11, 'Materiales de Soldadura', 3),
+(12, 'Metodos de Soldadura', NULL),
+(13, 'Fusion de Metales', 3),
+(14, 'Buceo 1', NULL),
+(15, 'Buceo 2', NULL),
+(16, 'Riesgo Electrico', NULL),
+(17, 'Bases de Datos Relacionales', 2),
+(18, 'Bases de Datos NO Relacionales', 2),
+(19, 'Electronica Digital', 6),
+(20, 'Microprocesadores', 7);
+
+SELECT * FROM Cursos;
+
+/* Agregue un campo Estado_Matrícula a la tabla Matrícula que indique si el
+estudiante se encuentra “En Ejecución”, “Terminado” o “Cancelado” */
+
+CREATE TABLE IF NOT EXISTS `Matriculas`(
+    `id_matricula` INT PRIMARY KEY AUTO_INCREMENT,
+    `id_aprendiz` INT,
+    FOREIGN KEY (`id_aprendiz`) REFERENCES `Aprendices`(`id_aprendiz`)
+)AUTO_INCREMENT=1;
+ALTER TABLE `Matriculas`ADD `estado` VARCHAR(45) NOT NULL AFTER `id_matricula`;
+
+/* Agregue a el campo edad a la tabla de Aprendices.
+ */
+
+ALTER TABLE `Aprendices` ADD `edad` VARCHAR(3) AFTER `apellido`;
+
+/* Si suponemos que los cursos tienen una duración diferente
+dependiendo de la ruta que lo contenga ¿qué modificación haría a la
+estructura de datos ya planteada? */
+
+ALTER TABLE `Cursos` ADD `duracion` INT NOT NULL AFTER `nombre_curso`;
+
+/* Seleccionar los nombres y edades de aprendices que están cursando la
+carrera de electrónica. */
+
+SELECT a.nombre AS Nombre, a.apellido AS Apellido, a.edad AS Edad
+FROM Aprendices AS a
+JOIN Rutas AS r ON r.id_ruta = a.id_ruta
+JOIN Carreras AS c ON c.id_carrera = r.id_carrera
+WHERE c.carrera = 'Electronica';
